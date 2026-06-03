@@ -11,7 +11,7 @@
     <!-- Google Fonts - Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&family=Fira+Code:wght=400;500&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -64,7 +64,7 @@
             </div>
             <div class="bg-slate-900 border border-slate-800/60 rounded-2xl px-4 py-3 shadow-sm">
                 <p class="text-sm leading-relaxed text-slate-200">
-                    Sistem başarıyla güncellendi Özcan abi! Papağan modunu tamamen çöpe attık. Artık arkada gerçek bir zeka var. 
+                    Sistem başarıyla güncellendi Özcan abi! Papağan modunu tamamen çöpe attık. Artık arkada senin özel API anahtarın ve gerçek bir zeka var. 
                 </p>
                 <p class="text-sm leading-relaxed text-slate-200 mt-2">
                     Dükkandan, ticaretten tamamen bağımsızız; sadece senin kişisel merakların, hobilerin ve kod dünyası üzerine konuşmaya hazırım. Şimdi neyi test edelim, kafandaki asıl fikri yaz bakalım abi?
@@ -102,17 +102,13 @@
         const API_KEY = "AQ.Ab8RN6KA7VHcxuIRFf9LTheepK5jsKkdT-xSIx1-ywqc8CMxfw";
         const ai = new GoogleGenAI({ apiKey: API_KEY });
         
-        // Yapay zekaya dükkandan uzak durmasını ve Özcan abiye özel kod koçu olmasını tembihliyoruz
+        // Yapay zekaya özel talimatlarını yüklüyoruz
         const model = ai.getGenerativeModel({ 
             model: "gemini-2.5-flash",
             systemInstruction: "Sen Özcan abinin (Özcan Çınar) tamamen dükkandan, ticari işlerden bağımsız kişisel yazılım, kod ve teknoloji asistanısın. Görevin dükkan işlerinden asla bahsetmemek, tamamen onun kişisel meraklarına, yazılım öğrenme isteğine ve ilgi alanlarına hitap etmektir. Konuşurken ona hep 'Özcan abi' diye hitap et. Samimi, saygılı, karizmatik bir Türkçe kullan. Eğer bir kod örneği veya yazılım mantığı anlatıyorsan, bunu modern koyu mod (dark mode) estetiğine uygun örneklerle ve her satırını Türkçe açıklayarak anlat. Ezbere kod yığma, mantığı öğretmeye odaklan."
         });
 
-        // Sohbet geçmişini tutan yapı
-        const chat = model.startChat({
-            history: []
-        });
-
+        const chat = model.startChat({ history: [] });
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
 
@@ -121,22 +117,18 @@
             const text = userInput.value.trim();
             if(!text) return;
 
-            // 1. Kullanıcı mesajını ekrana bas
             appendMessage(text, 'user');
             userInput.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // 2. Yükleniyor efekti
             const loadingId = 'loading-' + Date.now();
             appendLoading(loadingId);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                // 3. Canlı Gemini API'ye mesajı gönder
                 const result = await chat.sendMessage(text);
                 const responseText = result.response.text();
 
-                // Yükleniyor'u kaldır ve cevabı bas
                 document.getElementById(loadingId).remove();
                 appendMessage(responseText, 'ai');
             } catch (error) {
@@ -152,17 +144,14 @@
             const isUser = sender === 'user';
             msgDiv.className = isUser ? 'flex gap-3 justify-end items-start max-w-[85%] ml-auto' : 'flex gap-3 items-start max-w-[85%]';
             
-            // Basit Markdown biçimlendirmeleri (Kalın yazılar ve Satır sonları)
             let formattedText = text
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\n/g, '<br>');
 
-            // Markdown Kod Bloklarını yakalayıp şık birer editör kutusuna çeviriyoruz
             if (formattedText.includes('```')) {
                 const parts = formattedText.split('```');
                 for (let i = 1; i < parts.length; i += 2) {
                     let cleanCode = parts[i].replace(/<br>/g, '\n');
-                    // Başındaki dil etiketini temizle
                     const languages = ['html', 'javascript', 'css', 'json', 'python'];
                     languages.forEach(lang => {
                         if (cleanCode.startsWith(lang)) {
