@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Özcan Çınar - Özel Yapay Zeka Atölyesi</title>
+    <!-- Modern Tailwind CSS v4 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Awesome İkonları -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -18,7 +21,6 @@
         .code-font {
             font-family: 'Fira Code', monospace;
         }
-        /* Özel kaydırma çubuğu tasarımı */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -36,6 +38,7 @@
 </head>
 <body class="text-gray-100 antialiased min-h-screen flex flex-col justify-between max-w-lg mx-auto bg-[#0b0f19] shadow-2xl border-x border-slate-800/50">
 
+    <!-- ÜST HEADER -->
     <header class="bg-[#111827]/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50 px-4 py-4 flex justify-between items-center">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-600 to-red-600 flex items-center justify-center shadow-lg shadow-orange-900/20">
@@ -43,15 +46,16 @@
             </div>
             <div>
                 <h1 class="font-bold text-sm tracking-wide bg-gradient-to-r from-amber-200 to-orange-400 bg-clip-text text-transparent uppercase">Özcan'ın Atölyesi</h1>
-                <p class="text-[11px] text-slate-400 font-medium">Kişisel AI & Kod Asistanı v1.0</p>
+                <p class="text-[11px] text-slate-400 font-medium">Kişisel AI & Kod Asistanı v2.0</p>
             </div>
         </div>
         <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-wider">Canlı</span>
+            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-wider">Zeki Mod</span>
         </div>
     </header>
 
+    <!-- SOHBET ALANI -->
     <main id="chatContainer" class="flex-1 p-4 space-y-4 overflow-y-auto min-h-[calc(100vh-140px)] pb-24">
         
         <div class="flex gap-3 items-start max-w-[85%]">
@@ -60,10 +64,10 @@
             </div>
             <div class="bg-slate-900 border border-slate-800/60 rounded-2xl px-4 py-3 shadow-sm">
                 <p class="text-sm leading-relaxed text-slate-200">
-                    Özcan abi hoş geldin! Dükkanı, işi gücü tamamen dışarıda bıraktık. Burası senin tamamen özgür olduğun, merak ettiğin teknolojileri konuşacağımız ve keyif alarak kod mantığını çözeceğimiz **sana özel dijital odan**. 
+                    Sistem başarıyla güncellendi Özcan abi! Papağan modunu tamamen çöpe attık. Artık arkada gerçek bir zeka var. 
                 </p>
                 <p class="text-sm leading-relaxed text-slate-200 mt-2">
-                    Sohbete kendi websitemizden devam ediyoruz. İlk olarak neyi merak ediyorsun, hangi algoritmanın veya tasarımın kod sırrını çözerek başlayalım abi?
+                    Dükkandan, ticaretten tamamen bağımsızız; sadece senin kişisel merakların, hobilerin ve kod dünyası üzerine konuşmaya hazırım. Şimdi neyi test edelim, kafandaki asıl fikri yaz bakalım abi?
                 </p>
                 <span class="text-[9px] text-slate-500 font-mono block mt-2 text-right">Atölye AI • Şimdi</span>
             </div>
@@ -71,6 +75,7 @@
 
     </main>
 
+    <!-- ALT GİRİŞ ALANI VE INPUT -->
     <footer class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-[#0b0f19]/90 backdrop-blur-md border-t border-slate-800/60 p-3 z-50">
         <form id="chatForm" onsubmit="handleMessage(event)" class="flex gap-2 relative items-center">
             <input type="text" id="userInput" autocomplete="off" required placeholder="Sorunu yaz abi, koda dökelim..." 
@@ -82,34 +87,36 @@
         </form>
     </footer>
 
-    <script>
-        // ÖNEMLİ: Kendi Gemini API anahtarını ileride buraya ekleyebilirsin abi. 
-        // Şimdilik sistemin simüle edilmiş akıllı eğitim modunu çalıştırıyorum.
+    <!-- CANLI YAPAY ZEKA MOTORU -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    <script type="module">
+        import { GoogleGenAI } from '@google/generative-ai';
+
+        // Özcan abinin bize sağladığı canlı API anahtarı
+        const API_KEY = "AQ.Ab8RN6KA7VHcxuIRFf9LTheepK5jsKkdT-xSIx1-ywqc8CMxfw";
+        const ai = new GoogleGenAI({ apiKey: API_KEY });
+        
+        // Yapay zekaya dükkandan uzak durmasını ve Özcan abiye özel kod koçu olmasını tembihliyoruz
+        const model = ai.getGenerativeModel({ 
+            model: "gemini-2.5-flash",
+            systemInstruction: "Sen Özcan abinin (Özcan Çınar) tamamen dükkandan, ticari işlerden bağımsız kişisel yazılım, kod ve teknoloji asistanısın. Görevin dükkan işlerinden asla bahsetmemek, tamamen onun kişisel meraklarına, yazılım öğrenme isteğine ve ilgi alanlarına hitap etmektir. Konuşurken ona hep 'Özcan abi' diye hitap et. Samimi, saygılı, karizmatik bir Türkçe kullan. Eğer bir kod örneği veya yazılım mantığı anlatıyorsan, bunu modern koyu mod (dark mode) estetiğine uygun örneklerle ve her satırını Türkçe açıklayarak anlat. Ezbere kod yığma, mantığı öğretmeye odaklan."
+        });
+
+        // Sohbet geçmişini tutan yapı
+        const chat = model.startChat({
+            history: []
+        });
+
         const chatContainer = document.getElementById('chatContainer');
-        const chatForm = document.getElementById('chatForm');
         const userInput = document.getElementById('userInput');
 
-        // Yapay zekanın Özcan abiye özel konuşma mantığı ve hafızası
-        function getAIResponse(userMessage) {
-            const msg = userMessage.toLowerCase();
-            
-            if (msg.includes('merhaba') || msg.includes('selam')) {
-                return "Aleykümselam Özcan abi! Keyifler nasıl? Bugün kod dünyasında hangi deli soruların peşinden koşuyoruz?";
-            }
-            
-            if (msg.includes('kod') || msg.includes('yazılım') || msg.includes('öğrenmek')) {
-                return "Harika bir yerden girdin abi! Kod yazmak aslında sadece bilgisayara 'Eğer şu düğmeye basılırsa ekrandaki rengi koyulaştır' talimatı vermektir. Gel seninle küçük bir HTML/CSS deneyi yapalım. Mesela bir butonun rengini değiştiren şu basit satıra bak:\n\n```html\n<button class='bg-orange-500 text-white font-bold px-4 py-2 rounded-xl'>\n  Tıkla Abi\n</button>\n```\n\nBuradaki `bg-orange-500` arka planı turuncu yapar, `rounded-xl` ise köşelerini şıkça ovalleştirir. Buradaki 'orange' kelimesini 'red' yaparsan buton kırmızıya döner. Mantık tamamen bu kadar basit! Kendi butonumuzu tasarlayalım mı ne dersin?";
-            }
-
-            if (msg.includes('olasılık') || msg.includes('şans') || msg.includes('zar') || msg.includes('analiz')) {
-                return "Ooo matematik ve olasılık hesapları, en sevdiğim! Bilgisayarlar arka planda rastgele sayılar üreterek olasılıkları hesaplar. Mesela 1 ile 100 arasında rastgele bir sayı seçen kod yapısı javascript dilinde şöyledir:\n\n```javascript\nlet sansliSayi = Math.floor(Math.random() * 100) + 1;\n```\n\nBu kod satırı her çalıştığında arka planda tamamen bağımsız yepyeni bir sayı fırlatır. İstersen buraya seninle birlikte bir 'Olasılık Tahmin Simülatörü' kodu yazabiliriz, şans yüzdelerini ekranda canlı hesaplatırız?";
-            }
-
-            // Genel fallback cevabı (Özcan abiye göre özelleştirilmiş akıllı asistan modu)
-            return `Özcan abi, sorduğun bu soru tam anlamıyla bir yazılım mantığı veya algoritma ile çözülebilir! \n\nSana bunu sıkıcı teorilerle anlatmak yerine, hemen arkasındaki temel mantığı gösteren şık bir **Koyu Mod kod bloğuyla** açıklayabilirim. \n\nBu konunun kodunu yazıp ekranda nasıl duracağını canlı canlı test edelim mi abi, ne dersiniz?`;
-        }
-
-        window.handleMessage = function(e) {
+        window.handleMessage = async function(e) {
             e.preventDefault();
             const text = userInput.value.trim();
             if(!text) return;
@@ -117,42 +124,52 @@
             // 1. Kullanıcı mesajını ekrana bas
             appendMessage(text, 'user');
             userInput.value = '';
-
-            // Otomatik aşağı kaydır
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // 2. Yapay zeka yükleniyor efekti
+            // 2. Yükleniyor efekti
             const loadingId = 'loading-' + Date.now();
             appendLoading(loadingId);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // 3. 1 saniye gecikmeyle cevap ver (Doğal sohbet hissi için)
-            setTimeout(() => {
+            try {
+                // 3. Canlı Gemini API'ye mesajı gönder
+                const result = await chat.sendMessage(text);
+                const responseText = result.response.text();
+
+                // Yükleniyor'u kaldır ve cevabı bas
                 document.getElementById(loadingId).remove();
-                const aiResponse = getAIResponse(text);
-                appendMessage(aiResponse, 'ai');
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 1000);
+                appendMessage(responseText, 'ai');
+            } catch (error) {
+                console.error(error);
+                document.getElementById(loadingId).remove();
+                appendMessage("Özcan abi, sistem bağlantısında ufak bir kesinti oldu. Anahtarı veya interneti kontrol edip tekrar yazar mısın?", 'ai');
+            }
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         };
 
         function appendMessage(text, sender) {
             const msgDiv = document.createElement('div');
             const isUser = sender === 'user';
-            
             msgDiv.className = isUser ? 'flex gap-3 justify-end items-start max-w-[85%] ml-auto' : 'flex gap-3 items-start max-w-[85%]';
             
-            // Kod bloklarını HTML içinde düzgün formatlamak için fonksiyon
-            let formattedText = text.replace(/\n/g, '<br>');
-            // Markdown kod bloklarını (```) algılayıp şık kutulara çevirme
+            // Basit Markdown biçimlendirmeleri (Kalın yazılar ve Satır sonları)
+            let formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+
+            // Markdown Kod Bloklarını yakalayıp şık birer editör kutusuna çeviriyoruz
             if (formattedText.includes('```')) {
                 const parts = formattedText.split('```');
                 for (let i = 1; i < parts.length; i += 2) {
-                    // Temizleme işlemi
                     let cleanCode = parts[i].replace(/<br>/g, '\n');
-                    if (cleanCode.startsWith('html') || cleanCode.startsWith('javascript') || cleanCode.startsWith('css')) {
-                        cleanCode = cleanCode.substring(cleanCode.indexOf('\n') + 1);
-                    }
-                    parts[i] = `<div class="bg-slate-950 border border-slate-800 p-3 rounded-xl my-2 text-xs code-font text-amber-400 overflow-x-auto whitespace-pre">${cleanCode}</div>`;
+                    // Başındaki dil etiketini temizle
+                    const languages = ['html', 'javascript', 'css', 'json', 'python'];
+                    languages.forEach(lang => {
+                        if (cleanCode.startsWith(lang)) {
+                            cleanCode = cleanCode.substring(lang.length).trim();
+                        }
+                    });
+                    parts[i] = `<div class="bg-slate-950 border border-slate-800 p-3 rounded-xl my-2 text-xs code-font text-amber-400 overflow-x-auto whitespace-pre-wrap break-all">${cleanCode}</div>`;
                 }
                 formattedText = parts.join('');
             }
