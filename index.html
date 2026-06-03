@@ -75,16 +75,16 @@
 
     </main>
 
-    <!-- ALT GİRİŞ ALANI VE INPUT -->
+    <!-- ALT GİRİŞ ALANI VE INPUT (FORM YAPISI GERİ GELDİ) -->
     <footer class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-[#0b0f19]/90 backdrop-blur-md border-t border-slate-800/60 p-3 z-50">
-        <div class="flex gap-2 relative items-center">
+        <form id="chatForm" class="flex gap-2 relative items-center">
             <input type="text" id="userInput" autocomplete="off" placeholder="Sorunu yaz abi, koda dökelim..." 
                    class="w-full bg-[#111827] border border-slate-800 rounded-xl pl-4 pr-12 py-3.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-950/50 transition-all font-medium">
-            <button id="sendBtn" type="button" 
+            <button type="submit" 
                     class="absolute right-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md">
                 <i class="fa-solid fa-paper-plane text-xs"></i>
             </button>
-        </div>
+        </form>
     </footer>
 
     <!-- CANLI YAPAY ZEKA MOTORU -->
@@ -96,10 +96,11 @@
       }
     </script>
     <script type="module">
-        import { GoogleGenAI } from '@google/generative-ai';
+        import { GoogleGenerativeAI } from '@google/generative-ai';
 
+        // Kelime hatası düzeltildi: GoogleGenerativeAI olarak tanımlandı
         const API_KEY = "AQ.Ab8RN6KA7VHcxuIRFf9LTheepK5jsKkdT-xSIx1-ywqc8CMxfw";
-        const ai = new GoogleGenAI({ apiKey: API_KEY });
+        const ai = new GoogleGenerativeAI(API_KEY);
         
         const model = ai.getGenerativeModel({ 
             model: "gemini-2.5-flash",
@@ -109,10 +110,12 @@
         const chat = model.startChat({ history: [] });
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
+        const chatForm = document.getElementById('chatForm');
 
-        // Ana mesaj gönderme fonksiyonu
-        async function startSendMessage() {
+        // Form gönderildiğinde (hem Enter basınca hem de butona tıklayınca çalışır)
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Sayfa yenilenmesini engelle
+            
             const text = userInput.value.trim();
             if(!text) return;
 
@@ -132,21 +135,12 @@
                 appendMessage(responseText, 'ai');
             } catch (error) {
                 console.error(error);
-                document.getElementById(loadingId).remove();
-                appendMessage("Özcan abi, sistem bağlantısında ufak bir kesinti oldu. Anahtarı veya interneti kontrol edip tekrar yazar mısın?", 'ai');
+                if (document.getElementById(loadingId)) {
+                    document.getElementById(loadingId).remove();
+                }
+                appendMessage("Özcan abi, sistem bağlantısında ufak bir kesinti oldu. İnterneti kontrol edip tekrar yazar mısın?", 'ai');
             }
             chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        // 1. Butona tıklama olayı
-        sendBtn.addEventListener('click', startSendMessage);
-
-        // 2. Klavyeden Enter / Git tuşuna basılma olayı (Mobil Uyumlu)
-        userInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault(); // Sayfa yenilenmesini engelle
-                startSendMessage();
-            }
         });
 
         function appendMessage(text, sender) {
