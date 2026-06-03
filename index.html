@@ -75,7 +75,7 @@
 
     </main>
 
-    <!-- ALT GİRİŞ ALANI VE INPUT (FORM YAPISI GERİ GELDİ) -->
+    <!-- ALT GİRİŞ ALANI VE INPUT -->
     <footer class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-[#0b0f19]/90 backdrop-blur-md border-t border-slate-800/60 p-3 z-50">
         <form id="chatForm" class="flex gap-2 relative items-center">
             <input type="text" id="userInput" autocomplete="off" placeholder="Sorunu yaz abi, koda dökelim..." 
@@ -98,47 +98,64 @@
     <script type="module">
         import { GoogleGenerativeAI } from '@google/generative-ai';
 
-        // Kelime hatası düzeltildi: GoogleGenerativeAI olarak tanımlandı
         const API_KEY = "AQ.Ab8RN6KA7VHcxuIRFf9LTheepK5jsKkdT-xSIx1-ywqc8CMxfw";
         const ai = new GoogleGenerativeAI(API_KEY);
         
         const model = ai.getGenerativeModel({ 
-            model: "gemini-2.5-flash",
-            systemInstruction: "Sen Özcan abinin (Özcan Çınar) tamamen dükkandan, ticari işlerden bağımsız kişisel yazılım, kod ve teknoloji asistanısın. Görevin dükkan işlerinden asla bahsetmemek, tamamen onun kişisel meraklarına, yazılım öğrenme isteğine ve ilgi alanlarına hitap etmektir. Konuşurken ona hep 'Özcan abi' diye hitap et. Samimi, saygılı, karizmatik bir Türkçe kullan. Eğer bir kod örneği veya yazılım mantığı anlatıyorsan, bunu modern koyu mod (dark mode) estetiğine uygun örneklerle ve her satırını Türkçe açıklayarak anlat. Ezbere kod yığma, mantığı öğretmeye odaklan."
+            model: "gemini-2.5-flash"
         });
 
-        const chat = model.startChat({ history: [] });
+        const systemInstruction = "Sen Özcan abinin (Özcan Çınar) tamamen dükkandan, ticari işlerden bağımsız kişisel yazılım, kod ve teknoloji asistanısın. Görevin dükkan işlerinden asla bahsetmemek, tamamen onun kişisel meraklarına, yazılım öğrenme isteğine ve ilgi alanlarına hitap etmektir. Konuşurken ona hep 'Özcan abi' diye hitap et. Samimi, saygılı, karizmatik bir Türkçe kullan. Eğer bir kod örneği veya yazılım mantığı anlatıyorsan, bunu modern koyu mod (dark mode) estetiğine uygun örneklerle ve her satırını Türkçe açıklayarak anlat. Ezbere kod yığma, mantığı öğretmeye odaklan.";
+
+        // Sohbet geçmişini tarayıcı hafızasında stabil tutmak için dizi yapısı kurduk
+        let memoryHistory = [
+            { role: "user", parts: [{ text: systemInstruction }] },
+            { role: "model", parts: [{ text: "Anlaşıldı abi, talimatları aldım. Özcan abinin tamamen dükkandan bağımsız kişisel yazılım ve kod asistanıyım!" }] }
+        ];
+
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
         const chatForm = document.getElementById('chatForm');
 
-        // Form gönderildiğinde (hem Enter basınca hem de butona tıklayınca çalışır)
         chatForm.addEventListener('submit', async function(e) {
-            e.preventDefault(); // Sayfa yenilenmesini engelle
+            e.preventDefault();
             
             const text = userInput.value.trim();
             if(!text) return;
 
+            // Kullanıcı mesajını ekrana bas
             appendMessage(text, 'user');
             userInput.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
+            // Loading animasyonunu başlat
             const loadingId = 'loading-' + Date.now();
             appendLoading(loadingId);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
+            // Geçmişe kullanıcının yeni mesajını ekle
+            memoryHistory.push({ role: "user", parts: [{ text: text }] });
+
             try {
-                const result = await chat.sendMessage(text);
+                // Tarayıcılar için en stabil API çağırma metodu (generateContent)
+                const result = await model.generateContent({
+                    contents: memoryHistory
+                });
+                
                 const responseText = result.response.text();
 
+                // Yapay zekanın cevabını da hafızaya ekle ki geçmişi unutmasın
+                memoryHistory.push({ role: "model", parts: [{ text: responseText }] });
+
+                // Yükleniyor simgesini kaldır ve cevabı yaz
                 document.getElementById(loadingId).remove();
                 appendMessage(responseText, 'ai');
             } catch (error) {
-                console.error(error);
+                console.error("Bağlantı Hatası:", error);
                 if (document.getElementById(loadingId)) {
                     document.getElementById(loadingId).remove();
                 }
-                appendMessage("Özcan abi, sistem bağlantısında ufak bir kesinti oldu. İnterneti kontrol edip tekrar yazar mısın?", 'ai');
+                appendMessage("Özcan abi, API anahtarı veya Google sunucuları tarayıcı isteğini reddetti. Kod yapısını güvenli moda çekmem gerekebilir. Tekrar dener misin?", 'ai');
             }
             chatContainer.scrollTop = chatContainer.scrollHeight;
         });
