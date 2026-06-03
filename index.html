@@ -27,7 +27,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-sm tracking-wide bg-gradient-to-r from-amber-200 to-orange-400 bg-clip-text text-transparent uppercase">Özcan'ın Atölyesi</h1>
-                <p class="text-[11px] text-slate-400 font-medium">Kişisel AI & Kod Asistanı v2.5</p>
+                <p class="text-[11px] text-slate-400 font-medium">Kişisel AI & Kod Asistanı v3.0</p>
             </div>
         </div>
         <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800">
@@ -43,10 +43,10 @@
             </div>
             <div class="bg-slate-900 border border-slate-800/60 rounded-2xl px-4 py-3 shadow-sm">
                 <p class="text-sm leading-relaxed text-slate-200">
-                    Bağlantı protokolü tamamen yenilendi Özcan abi! Tarayıcı engellerini aşmak için alternatif güvenli köprü devreye alındı.
+                    Özcan abi, sistem altyapısı tamamen Vercel Serverless mimarisine taşındı! 
                 </p>
                 <p class="text-sm leading-relaxed text-slate-200 mt-2">
-                    Burası senin dükkandan uzak, tamamen özgür yazılım ve teknoloji odan. Sistemi test etmek için bir kod sorusu veya algoritma yaz abi, hemen deneyelim!
+                    Güvenli sunucu hattımız devrede. Şimdi sistemi test etmek için ilk sorunu yaz abi, yapay zeka arkadaki hattan doğrudan yanıtlayacak!
                 </p>
                 <span class="text-[9px] text-slate-500 font-mono block mt-2 text-right">Atölye AI • Şimdi</span>
             </div>
@@ -64,16 +64,14 @@
     </footer>
 
     <script type="module">
-        // Google'ın CORS kısıtlamasını aşmak için tarayıcı üzerinden çalışan resmi güvenli URL yapısı
-        const API_KEY = "AQ.Ab8RN6KA7VHcxuIRFf9LTheepK5jsKkdT-xSIx1-ywqc8CMxfw";
-        const CLEAN_KEY = API_KEY.replace(/\\s/g, '');
-        const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${CLEAN_KEY}`;
+        // Doğrudan dışarıya değil, kendi yazdığımız iç api fonksiyonuna istek atıyoruz
+        const BACKEND_URL = '/api/chat';
 
         const systemInstruction = "Sen Özcan abinin (Özcan Çınar) tamamen dükkandan, ticari işlerden bağımsız kişisel yazılım, kod ve teknoloji asistanısın. Görevin dükkan işlerinden asla bahsetmemek, tamamen onun kişisel meraklarına, yazılım öğrenme isteğine ve ilgi alanlarına hitap etmektir. Konuşurken ona hep 'Özcan abi' diye hitap et. Samimi, saygılı, karizmatik bir Türkçe kullan. Yazılım mimarilerini modern koyu mod estetiğine uygun kod bloklarıyla anlat.";
 
         let memoryHistory = [
             { role: "user", parts: [{ text: systemInstruction }] },
-            { role: "model", parts: [{ text: "Anlaşıldı Özcan abi, kişisel yazılım ve kod atölyen için hazırım!" }] }
+            { role: "model", parts: [{ text: "Anlaşıldı Özcan abi, kişisel güvenli hattımız üzerinden yazılım atölyen için hazırım!" }] }
         ];
 
         const chatContainer = document.getElementById('chatContainer');
@@ -96,11 +94,9 @@
             memoryHistory.push({ role: "user", parts: [{ text: text }] });
 
             try {
-                const response = await fetch(ENDPOINT, {
+                const response = await fetch(BACKEND_URL, {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ contents: memoryHistory })
                 });
 
@@ -112,15 +108,13 @@
 
                     document.getElementById(loadingId).remove();
                     appendMessage(responseText, 'ai');
-                } else if(data.error) {
-                    throw new Error(data.error.message);
                 } else {
-                    throw new Error("Boş yanıt");
+                    throw new Error("Geçersiz yanıt yapısı");
                 }
             } catch (error) {
                 console.error(error);
                 if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                appendMessage("Özcan abi, Google proxy sunucusu isteği onayladı fakat veri işlenemedi. Lütfen internetini yenileyip tekrar yazar mısın?", 'ai');
+                appendMessage("Özcan abi, güvenli sunucu hattı aktif ancak veri akışında ufak bir takılma oldu. Sayfayı yenileyip tekrar yazar mısın?", 'ai');
             }
             chatContainer.scrollTop = chatContainer.scrollHeight;
         });
