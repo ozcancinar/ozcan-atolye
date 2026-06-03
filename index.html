@@ -2,164 +2,193 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Özcan Çınar - Özel Yapay Zeka Atölyesi</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özcan'ın Atölyesi - Yapay Zeka Asistanı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&family=Fira+Code:wght=400;500&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #0b0f19; }
-        .code-font { font-family: 'Fira Code', monospace; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+        body {
+            background-color: #0B111E;
+            color: #E2E8F0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .chat-container {
+            height: calc(100vh - 140px);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B111E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 3px;
+        }
     </style>
 </head>
-<body class="text-gray-100 antialiased min-h-screen flex flex-col justify-between max-w-lg mx-auto bg-[#0b0f19] shadow-2xl border-x border-slate-800/50">
+<body class="flex flex-col h-screen overflow-hidden">
 
-    <header class="bg-[#111827]/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50 px-4 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-600 to-red-600 flex items-center justify-center shadow-lg shadow-orange-900/20">
-                <i class="fa-solid fa-terminal text-lg text-white"></i>
+    <!-- Üst Bar / Header -->
+    <header class="bg-[#111827] border-b border-[#1F2937] px-4 py-3 flex items-center justify-between z-10 shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-tr from-orange-600 to-amber-500 rounded-xl flex items-center justify-center shadow-md">
+                <i class="fa-solid animate-pulse text-white text-lg"></i>
             </div>
             <div>
-                <h1 class="font-bold text-sm tracking-wide bg-gradient-to-r from-amber-200 to-orange-400 bg-clip-text text-transparent uppercase">Özcan'ın Atölyesi</h1>
-                <p class="text-[11px] text-slate-400 font-medium">Kişisel AI & Kod Asistanı v3.0</p>
+                <h1 class="text-sm font-bold tracking-wide text-white uppercase">Özcan'ın Atölyesi</h1>
+                <p class="text-[11px] text-gray-400">Kişisel AI & Kod Asistanı v3.0</p>
             </div>
         </div>
-        <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-wider">Zeki Mod</span>
+        <div class="flex items-center space-x-2 bg-[#1F2937] px-2.5 py-1 rounded-full border border-[#374151]">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+            <span class="text-[10px] font-bold tracking-wider text-green-400 uppercase">Zekî Mod</span>
         </div>
     </header>
 
-    <main id="chatContainer" class="flex-1 p-4 space-y-4 overflow-y-auto min-h-[calc(100vh-140px)] pb-24">
-        <div class="flex gap-3 items-start max-w-[85%]">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center shrink-0 shadow-md">
-                <i class="fa-solid fa-robot text-xs text-white"></i>
+    <!-- Sohbet Alanı -->
+    <main id="chat-box" class="chat-container flex-1 overflow-y-auto p-4 space-y-4 bg-[#0F172A] relative">
+        <!-- İlk Karşılama Mesajı -->
+        <div class="flex items-start space-x-3 max-w-[85%]">
+            <div class="w-8 h-8 bg-gradient-to-tr from-orange-600 to-amber-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                <i class="fa-solid text-white text-xs"></i>
             </div>
-            <div class="bg-slate-900 border border-slate-800/60 rounded-2xl px-4 py-3 shadow-sm">
-                <p class="text-sm leading-relaxed text-slate-200">
-                    Özcan abi, sistem altyapısı tamamen Vercel Serverless mimarisine taşındı! 
+            <div class="bg-[#1E293B] border border-[#334155] rounded-2xl rounded-tl-none p-3.5 shadow-sm">
+                <p class="text-sm leading-relaxed text-gray-200">
+                    Özcan abi, sistem altyapısı tamamen Vercel Serverless mimarisine taşındı! Güvenli sunucu hattımız devrede. Şimdi sistemi test etmek için ilk sorunu yaz abi, yapay zeka arkadaki hattan doğrudan yanıtlayacak!
                 </p>
-                <p class="text-sm leading-relaxed text-slate-200 mt-2">
-                    Güvenli sunucu hattımız devrede. Şimdi sistemi test etmek için ilk sorunu yaz abi, yapay zeka arkadaki hattan doğrudan yanıtlayacak!
-                </p>
-                <span class="text-[9px] text-slate-500 font-mono block mt-2 text-right">Atölye AI • Şimdi</span>
+                <span class="text-[9px] text-gray-500 block text-right mt-2 font-medium">Atölye AI • Şimdi</span>
             </div>
         </div>
     </main>
 
-    <footer class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-[#0b0f19]/90 backdrop-blur-md border-t border-slate-800/60 p-3 z-50">
-        <form id="chatForm" class="flex gap-2 relative items-center">
-            <input type="text" id="userInput" autocomplete="off" placeholder="Sorunu yaz abi, koda dökelim..." 
-                   class="w-full bg-[#111827] border border-slate-800 rounded-xl pl-4 pr-12 py-3.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-950/50 transition-all font-medium">
-            <button type="submit" class="absolute right-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md">
-                <i class="fa-solid fa-paper-plane text-xs"></i>
+    <!-- Giriş Alanı / Sabit Alt Bar -->
+    <footer class="bg-[#111827] border-t border-[#1F2937] p-4 z-10 shadow-2xl">
+        <form id="chat-form" class="flex items-center space-x-2 max-w-4xl mx-auto relative">
+            <input 
+                type="text" 
+                id="user-input" 
+                placeholder="Sorunu yaz abi, koda dökelim..." 
+                autocomplete="off"
+                class="w-full bg-[#1F2937] border border-[#374151] rounded-xl pl-4 pr-12 py-3.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all duration-200 shadow-inner"
+            >
+            <button 
+                type="submit" 
+                class="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-tr from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 shadow-md active:scale-95"
+            >
+                <i class="fa-solid text-sm"></i>
             </button>
         </form>
     </footer>
 
-    <script type="module">
-        // Doğrudan dışarıya değil, kendi yazdığımız iç api fonksiyonuna istek atıyoruz
-        const BACKEND_URL = '/api/chat';
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
 
-        const systemInstruction = "Sen Özcan abinin (Özcan Çınar) tamamen dükkandan, ticari işlerden bağımsız kişisel yazılım, kod ve teknoloji asistanısın. Görevin dükkan işlerinden asla bahsetmemek, tamamen onun kişisel meraklarına, yazılım öğrenme isteğine ve ilgi alanlarına hitap etmektir. Konuşurken ona hep 'Özcan abi' diye hitap et. Samimi, saygılı, karizmatik bir Türkçe kullan. Yazılım mimarilerini modern koyu mod estetiğine uygun kod bloklarıyla anlat.";
+        // Mesaj geçmişini tutan dizi
+        let conversationHistory = [];
 
-        let memoryHistory = [
-            { role: "user", parts: [{ text: systemInstruction }] },
-            { role: "model", parts: [{ text: "Anlaşıldı Özcan abi, kişisel güvenli hattımız üzerinden yazılım atölyen için hazırım!" }] }
-        ];
-
-        const chatContainer = document.getElementById('chatContainer');
-        const userInput = document.getElementById('userInput');
-        const chatForm = document.getElementById('chatForm');
-
-        chatForm.addEventListener('submit', async function(e) {
+        chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const text = userInput.value.trim();
-            if(!text) return;
+            const message = userInput.value.trim();
+            if (!message) return;
 
-            appendMessage(text, 'user');
+            // Kullanıcı mesajını ekrana bas
+            appendMessage('Özcan Çınar', message, true);
             userInput.value = '';
-            chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            const loadingId = 'loading-' + Date.now();
-            appendLoading(loadingId);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            // Geçmişe ekle
+            conversationHistory.push({
+                role: 'user',
+                parts: [{ text: message }]
+            });
 
-            memoryHistory.push({ role: "user", parts: [{ text: text }] });
+            // Yükleniyor baloncuğu ekle
+            const loadingId = appendLoadingMessage();
 
             try {
-                const response = await fetch(BACKEND_URL, {
+                // Vercel güvenli API hattımıza istek atıyoruz
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: memoryHistory })
+                    body: JSON.stringify({ contents: conversationHistory })
                 });
+
+                if (!response.ok) throw new Error('Sunucu hatası');
 
                 const data = await response.json();
                 
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    const responseText = data.candidates[0].content.parts[0].text;
-                    memoryHistory.push({ role: "model", parts: [{ text: responseText }] });
+                // Yükleniyor baloncuğunu kaldır
+                removeLoadingMessage(loadingId);
 
-                    document.getElementById(loadingId).remove();
-                    appendMessage(responseText, 'ai');
-                } else {
-                    throw new Error("Geçersiz yanıt yapısı");
-                }
+                // Gelen cevabı oku
+                const aiResponse = data.candidates[0].content.parts[0].text;
+                
+                // Yapay zeka cevabını ekrana bas
+                appendMessage('Atölye AI', aiResponse, false);
+
+                // Geçmişe yapay zeka cevabını da ekle
+                conversationHistory.push({
+                    role: 'model',
+                    parts: [{ text: aiResponse }]
+                });
+
             } catch (error) {
+                removeLoadingMessage(loadingId);
+                appendMessage('Atölye AI', 'Özcan abi, güvenli sunucu hattı aktif ancak veri akışında ufak bir takılma oldu. Sayfayı yenileyip tekrar yazar mısın?', false);
                 console.error(error);
-                if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                appendMessage("Özcan abi, güvenli sunucu hattı aktif ancak veri akışında ufak bir takılma oldu. Sayfayı yenileyip tekrar yazar mısın?", 'ai');
             }
-            chatContainer.scrollTop = chatContainer.scrollHeight;
         });
 
-        function appendMessage(text, sender) {
+        function appendMessage(sender, text, isUser) {
             const msgDiv = document.createElement('div');
-            const isUser = sender === 'user';
-            msgDiv.className = isUser ? 'flex gap-3 justify-end items-start max-w-[85%] ml-auto' : 'flex gap-3 items-start max-w-[85%]';
-            
-            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+            msgDiv.className = `flex items-start space-x-3 max-w-[85%] ${isUser ? 'ml-auto flex-row-reverse space-x-reverse' : ''}`;
 
-            if (formattedText.includes('```')) {
-                const parts = formattedText.split('```');
-                for (let i = 1; i < parts.length; i += 2) {
-                    let cleanCode = parts[i].replace(/<br>/g, '\n');
-                    parts[i] = `<div class="bg-slate-950 border border-slate-800 p-3 rounded-xl my-2 text-xs code-font text-amber-400 overflow-x-auto whitespace-pre-wrap break-all">${cleanCode}</div>`;
-                }
-                formattedText = parts.join('');
-            }
+            const iconHtml = isUser 
+                ? `<div class="w-8 h-8 bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md"><i class="fa-solid text-slate-300 text-xs"></i></div>`
+                : `<div class="w-8 h-8 bg-gradient-to-tr from-orange-600 to-amber-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md"><i class="fa-solid text-white text-xs"></i></div>`;
 
-            const avatar = isUser 
-                ? `<div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center shrink-0 border border-slate-700"><i class="fa-solid fa-user text-xs text-slate-300"></i></div>`
-                : `<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center shrink-0 shadow-md"><i class="fa-solid fa-robot text-xs text-white"></i></div>`;
+            const bgClass = isUser 
+                ? 'bg-gradient-to-br from-orange-600 to-amber-600 border border-orange-500 rounded-2xl rounded-tr-none text-white' 
+                : 'bg-[#1E293B] border border-[#334155] rounded-2xl rounded-tl-none text-gray-200';
 
-            const content = isUser
-                ? `<div class="bg-gradient-to-br from-amber-600 to-orange-700 text-white rounded-2xl px-4 py-3 shadow-md"><p class="text-sm leading-relaxed">${formattedText}</p><span class="text-[9px] text-orange-200 font-mono block mt-1.5 text-right">Özcan Çınar</span></div>`
-                : `<div class="bg-slate-900 border border-slate-800/60 rounded-2xl px-4 py-3 shadow-sm"><p class="text-sm leading-relaxed text-slate-200">${formattedText}</p><span class="text-[9px] text-slate-500 font-mono block mt-1.5 text-right">Atölye AI</span></div>`;
-
-            msgDiv.innerHTML = isUser ? content + avatar : avatar + content;
-            chatContainer.appendChild(msgDiv);
-        }
-
-        function appendLoading(id) {
-            const loadingDiv = document.createElement('div');
-            loadingDiv.id = id;
-            loadingDiv.className = 'flex gap-3 items-start max-w-[85%]';
-            loadingDiv.innerHTML = `
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-xs text-white"></i></div>
-                <div class="bg-slate-900 border border-slate-800/60 rounded-2xl px-4 py-3 shadow-sm flex items-center gap-1.5 py-4">
-                    <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
-                    <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
-                    <span class="w-1.5 h-1.5 bg-orange-500 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+            msgDiv.innerHTML = `
+                ${iconHtml}
+                <div class="${bgClass} p-3.5 shadow-md">
+                    <p class="text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</p>
+                    <span class="text-[9px] ${isUser ? 'text-orange-200' : 'text-gray-500'} block text-right mt-2 font-medium">${sender} • Şimdi</span>
                 </div>
             `;
-            chatContainer.appendChild(loadingDiv);
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function appendLoadingMessage() {
+            const id = 'loading-' + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = id;
+            loadingDiv.className = "flex items-start space-x-3 max-w-[85%] animate-pulse";
+            loadingDiv.innerHTML = `
+                <div class="w-8 h-8 bg-gradient-to-tr from-orange-600 to-amber-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                    <i class="fa-solid text-white text-xs"></i>
+                </div>
+                <div class="bg-[#1E293B] border border-[#334155] rounded-2xl rounded-tl-none p-3.5 shadow-sm">
+                    <div class="flex space-x-1.5 items-center h-5 px-2">
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                    </div>
+                </div>
+            `;
+            chatBox.appendChild(loadingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return id;
+        }
+
+        function removeLoadingMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
         }
     </script>
 </body>
